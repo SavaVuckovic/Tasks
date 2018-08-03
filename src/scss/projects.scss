@@ -31,4 +31,11 @@
       margin: 0;
     }
   }
+  .project.new {
+    display: flex;
+    align-items: center;
+    .fa-plus {
+      margin-right: 12px;
+    }
+  }
 }
