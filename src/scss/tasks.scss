@@ -1,0 +1,24 @@
+.tasks {
+  flex: 4.5;
+  padding: 12px;
+  h2 {
+    margin: 8px;
+    text-align: center;
+    color: $white;
+  }
+  hr {
+    border: 0.3px solid $white;
+    margin: 16px 0;
+  }
+  .task {
+    background: $purple;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    padding: 16px 12px;
+    border-bottom: 4px solid $redish;
+    color: $white;
+    h3 {
+      margin: 0;
+    }
+  }
+}
