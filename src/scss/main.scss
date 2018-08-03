@@ -1,3 +1,40 @@
-body {
-  background: blue;
+@import 'variables';
+@import 'general';
+
+div {
+  width: 150px;
+  height: 150px;
+  background: grey;
+}
+
+#div1 {
+  background: $purple-light; // yes
+}
+
+#div2 {
+  background: $purple-dark;
+}
+
+#div3 {
+  background: $redish; // yes
+}
+
+#div4 {
+  background: $blue; // yes
+}
+
+#div5 {
+  background: $orange; // yes
+}
+
+#div6 {
+  background: $blue-dark; // yes
+}
+
+#div7 {
+  background: $cyan; // yes
+}
+
+#div8 {
+  background: $orange-light; 
 }
