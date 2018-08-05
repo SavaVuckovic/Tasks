@@ -41,4 +41,5 @@ const tasks = [
 document.addEventListener("DOMContentLoaded", () => {
   ui.renderProjects(projects);
   ui.renderTasks(tasks);
+  ui.addEventListeners();
 });

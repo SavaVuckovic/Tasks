@@ -3,6 +3,8 @@ const newProject = document.querySelector('#new-project');
 const newTask = document.querySelector('#new-task');
 const projectList = document.querySelector('#project-list');
 const tasksList = document.querySelector('#tasks-list');
+const newProjectModal = document.querySelector('#new-project-modal');
+const newTaskModal = document.querySelector('#new-task-modal');
 
 // render projects
 function renderProjects(projects) {
@@ -46,9 +48,27 @@ function renderTasks(tasks) {
 }
 
 // open new project modal
-
+function openNewProjectModal() {
+  // show the modal
+  newProjectModal.style.display = 'block';
+  // populate the modal body
+  const body = document.querySelector('div#new-project-modal .modal-body');
+  body.innerHTML = '<h1>TEST</h1><h2>TEST</h2>' // test
+  // close button
+  const close = document.querySelector('div#new-project-modal .modal-close');
+  close.addEventListener('click', () => {
+    // clear body contents & hide the modal
+    while (body.hasChildNodes()) {
+      body.removeChild(body.lastChild);
+    }
+    newProjectModal.style.display = 'none';
+  });
+}
 
 // open new task modal
+function openNewTaskModal() {
+  console.log('NEW TASK');
+}
 
 
 // open delete modal
@@ -61,9 +81,13 @@ function renderTasks(tasks) {
 
 
 // add event listeners
-
+function addEventListeners() {
+  newProject.addEventListener('click', openNewProjectModal);
+  newTask.addEventListener('click', openNewTaskModal);
+}
 
 export default {
   renderProjects,
-  renderTasks
+  renderTasks,
+  addEventListeners
 };
