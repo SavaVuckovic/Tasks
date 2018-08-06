@@ -1,4 +1,4 @@
-import { setActiveProject } from './index';
+import { setActiveProject, deleteTask, getActiveProjectID } from './index';
 
 // select important DOM elements
 const newProject = document.querySelector('#new-project');
@@ -60,7 +60,7 @@ function createTask(task) {
   deleteIcon.classList.add('fa-trash-alt');
   // delete icon event listener
   deleteIcon.addEventListener('click', () => {
-    openDeleteModal();
+    openDeleteModal(task, deleteTask);
   });
   // populate wrapper with icons
   icons.appendChild(expand);
@@ -206,7 +206,7 @@ function openNewTaskModal() {
 }
 
 // create delete form
-function createDeleteForm() {
+function createDeleteForm(callback) {
   const form = document.createElement('form');
   form.setAttribute('id', 'delete-form');
   // delete button
@@ -225,7 +225,7 @@ function createDeleteForm() {
   // when form is submitted
   form.addEventListener('submit', e => {
     e.preventDefault();
-    console.log('submitted');
+    callback();
     closeModal(deleteModal);
   });
 
@@ -233,12 +233,14 @@ function createDeleteForm() {
 }
 
 // open delete modal
-function openDeleteModal() {
+function openDeleteModal(task, deleteTask) {
   // show the modal
   deleteModal.style.display = 'block';
   // populate the modal body with delete form
   const body = document.querySelector('div#delete-modal .modal-body');
-  const form = createDeleteForm();
+  const form = createDeleteForm(() => { 
+    deleteTask(task.title, getActiveProjectID());
+  });
   body.appendChild(form);
   // close button
   const close = document.querySelector('div#delete-modal .modal-close');

@@ -26,26 +26,31 @@ const tasksData = [
     projectID: 0
   },
   {
-    title: 'Do Something',
+    title: 'Do Something 2',
     priority: 'high',
     projectID: 0
   },
   {
-    title: 'Do Something',
+    title: 'Do Something 3',
     priority: 'medium',
     projectID: 0
   },
   {
-    title: 'Do Something',
+    title: 'Do Something 4',
     priority: 'low',
     projectID: 1
   },
   {
-    title: 'Do Something',
+    title: 'Do Something 5',
     priority: 'low',
     projectID: 0
   }
 ];
+
+// returns active project ID
+export function getActiveProjectID() {
+  return activeProjectID;
+}
 
 // create a project
 function createProject(id, p) {
@@ -58,6 +63,18 @@ export function setActiveProject(id) {
   activeProjectID = id;
   ui.renderProjects(projects, activeProjectID);
   ui.renderTasks(tasksData, activeProjectID);
+}
+
+// delete task
+export function deleteTask(taskName, projectID) {
+  // find task index
+  tasksData.forEach(task => {
+    if (task.title === taskName && task.projectID === projectID) {
+      const index = tasksData.indexOf(task);
+      tasksData.splice(index, 1);
+      ui.renderTasks(tasksData, activeProjectID);
+    }
+  });
 }
 
 // when DOM is ready
