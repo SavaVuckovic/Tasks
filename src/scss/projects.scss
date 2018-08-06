@@ -17,18 +17,30 @@
     margin-bottom: 12px;
     padding: 12px;
     cursor: pointer;
+    @keyframes select {
+      from { 
+        background: $purple;
+        color: $white;
+      }
+      to {
+        background: $white;
+        color: $purple;
+      }
+    }
     h3 {
       margin: 0;
     }
     p {
       margin: 0;
     }
-    &:hover {
-      background: $white;
-      color: $purple-dark;
-    }
     &:last-child {
       margin: 0;
+    }
+    &.active {
+      background: $white;
+      color: $purple-dark;
+      animation-name: select;
+      animation-duration: 0.7s;
     }
   }
   #new-project {

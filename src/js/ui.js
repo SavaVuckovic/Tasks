@@ -1,3 +1,5 @@
+import { setActiveProject } from './index';
+
 // select important DOM elements
 const newProject = document.querySelector('#new-project');
 const newTask = document.querySelector('#new-task');
@@ -8,11 +10,20 @@ const newTaskModal = document.querySelector('#new-task-modal');
 const deleteModal = document.querySelector('#delete-modal');
 
 // render projects
-function renderProjects(projects) {
+function renderProjects(projects, activeProjectID) {
+  // clear projects list
+  while (projectList.hasChildNodes()) {
+    projectList.removeChild(projectList.lastChild);
+  }
   projects.forEach(project => {
     // project div
     const projectDiv = document.createElement('div');
     projectDiv.classList.add('project');
+    if (project.id === activeProjectID) {
+      projectDiv.classList.add('active');
+    }
+    // add listener for selecting active project
+    projectDiv.addEventListener('click', () => setActiveProject(project.id));
     // name
     const name = document.createElement('h3');
     name.innerText = project.name;
