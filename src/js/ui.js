@@ -5,6 +5,7 @@ const projectList = document.querySelector('#project-list');
 const tasksList = document.querySelector('#tasks-list');
 const newProjectModal = document.querySelector('#new-project-modal');
 const newTaskModal = document.querySelector('#new-task-modal');
+const deleteModal = document.querySelector('#delete-modal');
 
 // render projects
 function renderProjects(projects) {
@@ -176,7 +177,39 @@ function openNewTaskModal() {
 }
 
 // open delete modal
-
+function openDeleteModal() {
+  // show the modal
+  deleteModal.style.display = 'block';
+  // populate the modal body with delete form
+  const body = document.querySelector('div#delete-modal .modal-body');
+  const form = document.createElement('form');
+  form.setAttribute('id', 'delete-form');
+  const deleteBtn = document.createElement('button');
+  deleteBtn.innerText = 'Delete';
+  deleteBtn.setAttribute('id', 'delete-btn');
+  const cancelBtn = document.createElement('button');
+  cancelBtn.innerText = 'Cancel';
+  cancelBtn.setAttribute('id', 'cancel-btn');
+  cancelBtn.addEventListener('click', () => {
+    // clear body contents & hide the modal
+    while (body.hasChildNodes()) {
+      body.removeChild(body.lastChild);
+    }
+    deleteModal.style.display = 'none';
+  });
+  form.appendChild(deleteBtn);
+  form.appendChild(cancelBtn);
+  body.appendChild(form);
+  // close button
+  const close = document.querySelector('div#delete-modal .modal-close');
+  close.addEventListener('click', () => {
+    // clear body contents & hide the modal
+    while (body.hasChildNodes()) {
+      body.removeChild(body.lastChild);
+    }
+    deleteModal.style.display = 'none';
+  });
+}
 
 // expand task
 
@@ -193,5 +226,6 @@ function addEventListeners() {
 export default {
   renderProjects,
   renderTasks,
-  addEventListeners
+  addEventListeners,
+  openDeleteModal
 };

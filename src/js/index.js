@@ -42,4 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
   ui.renderProjects(projects);
   ui.renderTasks(tasks);
   ui.addEventListeners();
+  // test
+  ui.openDeleteModal();
 });

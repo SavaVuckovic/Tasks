@@ -88,6 +88,23 @@
           }
         }
       }
+      #delete-form {
+        display: flex;
+        #delete-btn {
+          background: $redish;
+          border: 2px solid $redish;
+          flex: 1;
+          margin-right: 6px;
+          &:hover {
+            background: $white;
+            color: $redish;
+          }
+        }
+        #cancel-btn {
+          flex: 1;
+          margin-left: 6px;
+        }
+      }
     }    
   }
 }
