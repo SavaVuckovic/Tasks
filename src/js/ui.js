@@ -47,31 +47,43 @@ function renderTasks(tasks) {
   });
 }
 
+// create new project form
+function createNewProjectForm() {
+  const form = document.createElement('form');
+  // name input
+  const nameInput = document.createElement('input');
+  nameInput.setAttribute('type', 'text');
+  nameInput.setAttribute('name', 'name');
+  nameInput.setAttribute('placeholder', 'Project Name');
+  // description input
+  const descriptionInput = document.createElement('input');
+  descriptionInput.setAttribute('type', 'text');
+  descriptionInput.setAttribute('name', 'description');
+  descriptionInput.setAttribute('placeholder', 'Project Description');
+  // submit button
+  const submit = document.createElement('button');
+  submit.setAttribute('type', 'submit');
+  submit.innerText = 'Create';
+  // populate form
+  form.appendChild(nameInput);
+  form.appendChild(descriptionInput);
+  form.appendChild(submit);
+  // when form is submitted
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    console.log('submitted');
+  });
+
+  return form;
+}
+
 // open new project modal
 function openNewProjectModal() {
   // show the modal
   newProjectModal.style.display = 'block';
   // populate the modal body with a form for new project
   const body = document.querySelector('div#new-project-modal .modal-body');
-  const form = document.createElement('form');
-  const nameInput = document.createElement('input');
-  nameInput.setAttribute('type', 'text');
-  nameInput.setAttribute('name', 'name');
-  nameInput.setAttribute('placeholder', 'Project Name');
-  const descriptionInput = document.createElement('input');
-  descriptionInput.setAttribute('type', 'text');
-  descriptionInput.setAttribute('name', 'description');
-  descriptionInput.setAttribute('placeholder', 'Project Description');
-  const submit = document.createElement('button');
-  submit.setAttribute('type', 'submit');
-  submit.innerText = 'Create';
-  form.appendChild(nameInput);
-  form.appendChild(descriptionInput);
-  form.appendChild(submit);
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    console.log('submitted');
-  });
+  const form = createNewProjectForm();
   body.appendChild(form);
   // close button
   const close = document.querySelector('div#new-project-modal .modal-close');
@@ -84,11 +96,31 @@ function openNewProjectModal() {
   });
 }
 
-// open new task modal
-function openNewTaskModal() {
-  console.log('NEW TASK');
+// create new task form
+function createNewTaskForm() {
+  const form = document.createElement('form');
+  form.innerHTML = 'TEST';
+  return form;
 }
 
+// open new task modal
+function openNewTaskModal() {
+  // show the modal
+  newTaskModal.style.display = 'block';
+  // populate the modal body with a form for new task
+  const body = document.querySelector('div#new-task-modal .modal-body');
+  const form = createNewTaskForm();
+  body.appendChild(form);
+  // close button
+  const close = document.querySelector('div#new-task-modal .modal-close');
+  close.addEventListener('click', () => {
+    // clear body contents & hide the modal
+    while (body.hasChildNodes()) {
+      body.removeChild(body.lastChild);
+    }
+    newTaskModal.style.display = 'none';
+  });
+}
 
 // open delete modal
 
