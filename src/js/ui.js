@@ -51,9 +51,28 @@ function renderTasks(tasks) {
 function openNewProjectModal() {
   // show the modal
   newProjectModal.style.display = 'block';
-  // populate the modal body
+  // populate the modal body with a form for new project
   const body = document.querySelector('div#new-project-modal .modal-body');
-  body.innerHTML = '<h1>TEST</h1><h2>TEST</h2>' // test
+  const form = document.createElement('form');
+  const nameInput = document.createElement('input');
+  nameInput.setAttribute('type', 'text');
+  nameInput.setAttribute('name', 'name');
+  nameInput.setAttribute('placeholder', 'Project Name');
+  const descriptionInput = document.createElement('input');
+  descriptionInput.setAttribute('type', 'text');
+  descriptionInput.setAttribute('name', 'description');
+  descriptionInput.setAttribute('placeholder', 'Project Description');
+  const submit = document.createElement('button');
+  submit.setAttribute('type', 'submit');
+  submit.innerText = 'Create';
+  form.appendChild(nameInput);
+  form.appendChild(descriptionInput);
+  form.appendChild(submit);
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    console.log('submitted');
+  });
+  body.appendChild(form);
   // close button
   const close = document.querySelector('div#new-project-modal .modal-close');
   close.addEventListener('click', () => {
