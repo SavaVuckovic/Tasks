@@ -73,6 +73,7 @@ function createNewProjectForm() {
   form.addEventListener('submit', e => {
     e.preventDefault();
     console.log('submitted');
+    closeModal(newProjectModal);
   });
 
   return form;
@@ -88,13 +89,7 @@ function openNewProjectModal() {
   body.appendChild(form);
   // close button
   const close = document.querySelector('div#new-project-modal .modal-close');
-  close.addEventListener('click', () => {
-    // clear body contents & hide the modal
-    while (body.hasChildNodes()) {
-      body.removeChild(body.lastChild);
-    }
-    newProjectModal.style.display = 'none';
-  });
+  close.addEventListener('click', () => closeModal(newProjectModal));
 }
 
 // create new task form
@@ -152,6 +147,7 @@ function createNewTaskForm() {
   form.addEventListener('submit', e => {
     e.preventDefault();
     console.log('submitted');
+    closeModal(newTaskModal);
   });
 
   return form;
@@ -167,13 +163,34 @@ function openNewTaskModal() {
   body.appendChild(form);
   // close button
   const close = document.querySelector('div#new-task-modal .modal-close');
-  close.addEventListener('click', () => {
-    // clear body contents & hide the modal
-    while (body.hasChildNodes()) {
-      body.removeChild(body.lastChild);
-    }
-    newTaskModal.style.display = 'none';
+  close.addEventListener('click', () => closeModal(newTaskModal));
+}
+
+// create delete form
+function createDeleteForm() {
+  const form = document.createElement('form');
+  form.setAttribute('id', 'delete-form');
+  // delete button
+  const deleteBtn = document.createElement('button');
+  deleteBtn.innerText = 'Delete';
+  deleteBtn.setAttribute('id', 'delete-btn');
+  deleteBtn.setAttribute('type', 'submit');
+  // deleteBtn.addEventListener('click' , () => {});
+  // cancel button
+  const cancelBtn = document.createElement('button');
+  cancelBtn.innerText = 'Cancel';
+  cancelBtn.setAttribute('id', 'cancel-btn');
+  // populate form
+  form.appendChild(deleteBtn);
+  form.appendChild(cancelBtn);
+  // when form is submitted
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    console.log('submitted');
+    closeModal(deleteModal);
   });
+
+  return form;
 }
 
 // open delete modal
@@ -182,33 +199,22 @@ function openDeleteModal() {
   deleteModal.style.display = 'block';
   // populate the modal body with delete form
   const body = document.querySelector('div#delete-modal .modal-body');
-  const form = document.createElement('form');
-  form.setAttribute('id', 'delete-form');
-  const deleteBtn = document.createElement('button');
-  deleteBtn.innerText = 'Delete';
-  deleteBtn.setAttribute('id', 'delete-btn');
-  const cancelBtn = document.createElement('button');
-  cancelBtn.innerText = 'Cancel';
-  cancelBtn.setAttribute('id', 'cancel-btn');
-  cancelBtn.addEventListener('click', () => {
-    // clear body contents & hide the modal
-    while (body.hasChildNodes()) {
-      body.removeChild(body.lastChild);
-    }
-    deleteModal.style.display = 'none';
-  });
-  form.appendChild(deleteBtn);
-  form.appendChild(cancelBtn);
+  const form = createDeleteForm();
   body.appendChild(form);
   // close button
   const close = document.querySelector('div#delete-modal .modal-close');
-  close.addEventListener('click', () => {
-    // clear body contents & hide the modal
-    while (body.hasChildNodes()) {
-      body.removeChild(body.lastChild);
-    }
-    deleteModal.style.display = 'none';
-  });
+  close.addEventListener('click', () => closeModal(deleteModal));
+}
+
+// close the modal that is passed in
+function closeModal(modal) {
+  // empty modal body content
+  const modalBody = document.querySelector(`div#${modal.getAttribute('id')} .modal-body`);
+  while (modalBody.hasChildNodes()) {
+    modalBody.removeChild(modalBody.lastChild);
+  }
+  // hide the modal
+  modal.style.display = 'none';
 }
 
 // expand task
