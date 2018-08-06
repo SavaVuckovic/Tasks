@@ -37,31 +37,52 @@ function renderProjects(projects, activeProjectID) {
   });
 }
 
+// create single task element
+function createTask(task) {
+  // task div
+  const taskDiv = document.createElement('div');
+  taskDiv.classList.add('task');
+  // render border color based on priority
+  taskDiv.classList.add(task.priority);
+  // title
+  const title = document.createElement('h3');
+  title.innerText = task.title;
+  // icons wrapper
+  const icons = document.createElement('div');
+  icons.classList.add('icons-wrapper');
+  // expand icon
+  const expand = document.createElement('i');
+  expand.classList.add('fas');
+  expand.classList.add('fa-arrow-down');
+  // delete icon
+  const deleteIcon = document.createElement('i');
+  deleteIcon.classList.add('fas');
+  deleteIcon.classList.add('fa-trash-alt');
+  // delete icon event listener
+  deleteIcon.addEventListener('click', () => {
+    openDeleteModal();
+  });
+  // populate wrapper with icons
+  icons.appendChild(expand);
+  icons.appendChild(deleteIcon);
+  // populate and append to tasks list
+  taskDiv.appendChild(title);
+  taskDiv.appendChild(icons);
+
+  return taskDiv;
+}
+
 // render tasks
 function renderTasks(tasks, activeProjectID) {
   // clear tasks list
-    while (tasksList.hasChildNodes()) {
-      tasksList.removeChild(tasksList.lastChild);
+  while (tasksList.hasChildNodes()) {
+    tasksList.removeChild(tasksList.lastChild);
   }
   // render only tasks that belong to active project
   tasks
     .filter(task => task.projectID === activeProjectID)
     .forEach(task => {
-      // task div
-      const taskDiv = document.createElement('div');
-      taskDiv.classList.add('task');
-      // render border color based on priority
-      taskDiv.classList.add(task.priority);
-      // title
-      const title = document.createElement('h3');
-      title.innerText = task.title;
-      // expand icon
-      const expand = document.createElement('i');
-      expand.classList.add('fas');
-      expand.classList.add('fa-arrow-down');
-      // populate and append to tasks list
-      taskDiv.appendChild(title);
-      taskDiv.appendChild(expand);
+      const taskDiv = createTask(task);
       tasksList.appendChild(taskDiv);
     });
 }

@@ -21,16 +21,25 @@
     h3 {
       margin: 0;
     }
-    .fa-arrow-down {
-      background: $purple-dark;
-      line-height: 22px;
-      padding: 4px;
-      font-size: 18px;
-      border-radius: 6px;
-      height: 30px;
-      width: 30px;
-      text-align: center;
+    .icons-wrapper {
       margin-left: auto;
+      .fa-arrow-down,
+      .fa-trash-alt {
+        background: $purple-dark;
+        line-height: 22px;
+        padding: 4px;
+        font-size: 18px;
+        border-radius: 6px;
+        height: 30px;
+        width: 30px;
+        text-align: center;
+        margin-left: 12px;
+      }
+      .fa-trash-alt {
+        &:hover {
+          background: $redish;
+        }
+      }
     }
     &.high {
       border-bottom: 4px solid $redish;

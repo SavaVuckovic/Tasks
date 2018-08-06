@@ -68,10 +68,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   setActiveProject(projects[0].id);
-
-  ui.renderProjects(projects, activeProjectID);
-  ui.renderTasks(tasksData, activeProjectID);
   ui.addEventListeners();
-  // test
-  ui.openDeleteModal();
 });
