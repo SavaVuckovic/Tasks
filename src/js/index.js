@@ -23,22 +23,27 @@ const tasksData = [
   {
     title: 'Do Something',
     priority: 'high',
+    projectID: 0
   },
   {
     title: 'Do Something',
     priority: 'high',
+    projectID: 0
   },
   {
     title: 'Do Something',
     priority: 'medium',
+    projectID: 0
   },
   {
     title: 'Do Something',
     priority: 'low',
+    projectID: 1
   },
   {
     title: 'Do Something',
     priority: 'low',
+    projectID: 0
   }
 ];
 
@@ -52,6 +57,7 @@ function createProject(id, p) {
 export function setActiveProject(id) {
   activeProjectID = id;
   ui.renderProjects(projects, activeProjectID);
+  ui.renderTasks(tasksData, activeProjectID);
 }
 
 // when DOM is ready
@@ -64,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setActiveProject(projects[0].id);
 
   ui.renderProjects(projects, activeProjectID);
-  ui.renderTasks(tasksData);
+  ui.renderTasks(tasksData, activeProjectID);
   ui.addEventListeners();
   // test
   ui.openDeleteModal();

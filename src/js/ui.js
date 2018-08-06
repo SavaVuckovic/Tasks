@@ -38,25 +38,32 @@ function renderProjects(projects, activeProjectID) {
 }
 
 // render tasks
-function renderTasks(tasks) {
-  tasks.forEach(task => {
-    // task div
-    const taskDiv = document.createElement('div');
-    taskDiv.classList.add('task');
-    // render border color based on priority
-    taskDiv.classList.add(task.priority);
-    // title
-    const title = document.createElement('h3');
-    title.innerText = task.title;
-    // expand icon
-    const expand = document.createElement('i');
-    expand.classList.add('fas');
-    expand.classList.add('fa-arrow-down');
-    // populate and append to tasks list
-    taskDiv.appendChild(title);
-    taskDiv.appendChild(expand);
-    tasksList.appendChild(taskDiv);
-  });
+function renderTasks(tasks, activeProjectID) {
+  // clear tasks list
+    while (tasksList.hasChildNodes()) {
+      tasksList.removeChild(tasksList.lastChild);
+  }
+  // render only tasks that belong to active project
+  tasks
+    .filter(task => task.projectID === activeProjectID)
+    .forEach(task => {
+      // task div
+      const taskDiv = document.createElement('div');
+      taskDiv.classList.add('task');
+      // render border color based on priority
+      taskDiv.classList.add(task.priority);
+      // title
+      const title = document.createElement('h3');
+      title.innerText = task.title;
+      // expand icon
+      const expand = document.createElement('i');
+      expand.classList.add('fas');
+      expand.classList.add('fa-arrow-down');
+      // populate and append to tasks list
+      taskDiv.appendChild(title);
+      taskDiv.appendChild(expand);
+      tasksList.appendChild(taskDiv);
+    });
 }
 
 // create new project form
