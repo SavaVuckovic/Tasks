@@ -1,4 +1,10 @@
-import { setActiveProject, deleteTask, getActiveProjectID } from './index';
+import {
+  setActiveProject,
+  getActiveProjectID,
+  createProject,
+  createTask,
+  deleteTask,
+} from './index';
 
 // select important DOM elements
 const newProject = document.querySelector('#new-project');
@@ -38,7 +44,7 @@ function renderProjects(projects, activeProjectID) {
 }
 
 // create single task element
-function createTask(task) {
+function createTaskDiv(task) {
   // task div
   const taskDiv = document.createElement('div');
   taskDiv.classList.add('task');
@@ -82,7 +88,7 @@ function renderTasks(tasks, activeProjectID) {
   tasks
     .filter(task => task.projectID === activeProjectID)
     .forEach(task => {
-      const taskDiv = createTask(task);
+      const taskDiv = createTaskDiv(task);
       tasksList.appendChild(taskDiv);
     });
 }
@@ -111,7 +117,13 @@ function createNewProjectForm() {
   // when form is submitted
   form.addEventListener('submit', e => {
     e.preventDefault();
-    console.log('submitted');
+    // extract form values
+    const projectObj = {
+      name: e.target.elements['name'].value,
+      description: e.target.elements['description'].value,
+    };
+    // pass that object to create function & close the modal
+    createProject(projectObj);
     closeModal(newProjectModal);
   });
 
@@ -155,7 +167,7 @@ function createNewTaskForm() {
   dueDateInput.setAttribute('name', 'due-date');
   dueDateWrapper.appendChild(dueDateLabel);
   dueDateWrapper.appendChild(dueDateInput);
-  // priority input 
+  // priority input
   const priorityWrapper = document.createElement('div');
   priorityWrapper.classList.add('input-wrapper');
   const priorityLabel = document.createElement('label');
@@ -214,7 +226,7 @@ function createDeleteForm(callback) {
   deleteBtn.innerText = 'Delete';
   deleteBtn.setAttribute('id', 'delete-btn');
   deleteBtn.setAttribute('type', 'submit');
-  // deleteBtn.addEventListener('click' , () => {});
+  deleteBtn.addEventListener('click', callback);
   // cancel button
   const cancelBtn = document.createElement('button');
   cancelBtn.innerText = 'Cancel';
@@ -225,7 +237,6 @@ function createDeleteForm(callback) {
   // when form is submitted
   form.addEventListener('submit', e => {
     e.preventDefault();
-    callback();
     closeModal(deleteModal);
   });
 
@@ -238,7 +249,7 @@ function openDeleteModal(task, deleteTask) {
   deleteModal.style.display = 'block';
   // populate the modal body with delete form
   const body = document.querySelector('div#delete-modal .modal-body');
-  const form = createDeleteForm(() => { 
+  const form = createDeleteForm(() => {
     deleteTask(task.title, getActiveProjectID());
   });
   body.appendChild(form);

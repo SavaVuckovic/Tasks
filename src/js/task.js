@@ -1,5 +1,5 @@
 export default class Task {
-  constructor(projectID, title, description, dueDate, priority) {
+  constructor({ projectID, title, description, dueDate, priority }) {
     this.projectID = projectID;
     this.title = title;
     this.description = description;

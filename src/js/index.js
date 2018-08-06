@@ -1,6 +1,7 @@
 import Project from './project';
 import Task from './task';
 import ui from './ui';
+import uniqid from 'uniqid';
 import '../scss/main.scss';
 import '../index.html';
 
@@ -52,16 +53,25 @@ export function getActiveProjectID() {
   return activeProjectID;
 }
 
-// create a project
-function createProject(id, p) {
-  const project = new Project(id, p);
-  projects.push(project);
-}
-
 // set active project
 export function setActiveProject(id) {
   activeProjectID = id;
   ui.renderProjects(projects, activeProjectID);
+  ui.renderTasks(tasksData, activeProjectID);
+}
+
+// create a project
+export function createProject(projectObj) {
+  const project = new Project(uniqid(), projectObj);
+  projects.push(project);
+  ui.renderProjects(projects, activeProjectID);
+  ui.renderTasks(tasksData, activeProjectID);
+}
+
+// create a task
+export function createTask(taskObj) {
+  const task = new Task(taskObj);
+  tasksData.push(taskObj);
   ui.renderTasks(tasksData, activeProjectID);
 }
 
@@ -80,8 +90,8 @@ export function deleteTask(taskName, projectID) {
 // when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   // test
-  projectsData.forEach((p, index) => {
-    createProject(index, p);
+  projectsData.forEach((p) => {
+    createProject(p);
   });
 
   setActiveProject(projects[0].id);
