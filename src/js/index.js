@@ -1,11 +1,12 @@
+import uniqid from 'uniqid';
 import Project from './project';
 import Task from './task';
 import ui from './ui';
-import uniqid from 'uniqid';
+import storage from './storage';
 import '../scss/main.scss';
 import '../index.html';
 
-const projects = [];
+let projects;
 let activeProjectID;
 
 // test data
@@ -64,6 +65,7 @@ export function setActiveProject(id) {
 export function createProject(projectObj) {
   const project = new Project(uniqid(), projectObj);
   projects.push(project);
+  storage.saveProject(project);
   ui.renderProjects(projects, activeProjectID);
   ui.renderTasks(tasksData, activeProjectID);
 }
@@ -89,11 +91,18 @@ export function deleteTask(taskName, projectID) {
 
 // when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-  // test
-  projectsData.forEach((p) => {
-    createProject(p);
-  });
+  // get projects from localStorage and render them
+  projects = storage.fetchProjects();
+  if (projects.length > 0) {
+    setActiveProject(projects[0].id);
+  } else {
+    const defaultProjectObj = {
+      name: 'Default Project',
+      description: 'Project description goes here'
+    };
+    createProject(defaultProjectObj);
+  }
 
-  setActiveProject(projects[0].id);
+  // add modal listeners
   ui.addEventListeners();
 });

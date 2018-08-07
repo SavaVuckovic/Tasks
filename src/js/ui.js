@@ -205,7 +205,6 @@ function createNewTaskForm() {
       dueDate: e.target.elements['due-date'].value,
       priority: e.target.elements['priority'].value,
     };
-    console.log(taskObj);
     createTask(taskObj);
     closeModal(newTaskModal);
   });
