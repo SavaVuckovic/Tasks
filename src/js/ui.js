@@ -197,7 +197,16 @@ function createNewTaskForm() {
   // when form is submitted
   form.addEventListener('submit', e => {
     e.preventDefault();
-    console.log('submitted');
+    // extract form values
+    const taskObj = {
+      projectID: getActiveProjectID(),
+      title: e.target.elements['title'].value,
+      description: e.target.elements['description'].value,
+      dueDate: e.target.elements['due-date'].value,
+      priority: e.target.elements['priority'].value,
+    };
+    console.log(taskObj);
+    createTask(taskObj);
     closeModal(newTaskModal);
   });
 
