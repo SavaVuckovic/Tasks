@@ -13,8 +13,7 @@ function fetchTasks() {
 // save projects to localStorage
 function saveProject(project) {
   if (localStorage.getItem('projects') === null) {
-    const projects = [];
-    projects.push(project);
+    const projects = [project];
     localStorage.setItem('projects', JSON.stringify(projects));
   } else {
     const projects = JSON.parse(localStorage.getItem('projects'));
@@ -24,7 +23,16 @@ function saveProject(project) {
 }
 
 // save tasks to localStorage
-
+function saveTask(task) {
+  if (localStorage.getItem('tasks') === null) {
+    const tasks = [task];
+    localStorage.setItem('tasks', JSON.stringify([task]));
+  } else {
+    const tasks = JSON.parse(localStorage.getItem('task'));
+    tasks.push(task);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }
+}
 
 // delete task project localStorage
 
@@ -34,5 +42,6 @@ function saveProject(project) {
 export default {
   fetchProjects,
   fetchTasks,
-  saveProject
+  saveProject,
+  saveTask
 };
