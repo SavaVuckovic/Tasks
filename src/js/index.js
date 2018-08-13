@@ -7,8 +7,8 @@ import '../scss/main.scss';
 import '../index.html';
 
 let activeProjectID;
-let projects = [];
-let tasks = [];
+let projects;
+let tasks;
 
 // returns active project ID
 export function getActiveProjectID() {
@@ -18,8 +18,8 @@ export function getActiveProjectID() {
 // set active project
 export function setActiveProject(id) {
   activeProjectID = id;
-  ui.renderProjects(projects, activeProjectID);
-  ui.renderTasks(tasks, activeProjectID);
+  ui.renderProjects(projects, id);
+  ui.renderTasks(tasks, id);
 }
 
 // create a project
@@ -53,8 +53,9 @@ export function deleteTask(taskName, projectID) {
 
 // when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
-  // get projects from localStorage and render them
+  // get projects and tasks from localStorage and render them
   projects = storage.fetchProjects();
+  tasks = storage.fetchTasks();
   if (projects.length > 0) {
     setActiveProject(projects[0].id);
   } else {
@@ -64,12 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
       description: 'Project description goes here'
     };
     createProject(defaultProjectObj);
-  }
-
-  // get tasks from localStorage and render them
-  tasks = storage.fetchTasks();
-  if (tasks.length > 0) {
-    ui.renderTasks(tasks, getActiveProjectID)
   }
 
   // add modal listeners

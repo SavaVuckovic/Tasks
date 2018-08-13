@@ -3,6 +3,5 @@ export default class Project {
     this.id = id
     this.name = name;
     this.description = description;
-    this.tasks = [];
   }
 }

@@ -28,13 +28,13 @@ function saveTask(task) {
     const tasks = [task];
     localStorage.setItem('tasks', JSON.stringify([task]));
   } else {
-    const tasks = JSON.parse(localStorage.getItem('task'));
+    const tasks = fetchTasks();
     tasks.push(task);
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }
 }
 
-// delete task project localStorage
+// delete project from localStorage
 
 
 // delete task from localStorage

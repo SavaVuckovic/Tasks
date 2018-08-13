@@ -277,11 +277,10 @@ function closeModal(modal) {
   modal.style.display = 'none';
 }
 
-// expand task
-
-
-// shrink task
-
+// expand/shrink task
+function toggleTaskInfo() {
+  console.log('clicked');
+}
 
 // add event listeners
 function addEventListeners() {
@@ -292,6 +291,5 @@ function addEventListeners() {
 export default {
   renderProjects,
   renderTasks,
-  addEventListeners,
-  openDeleteModal
+  addEventListeners
 };
