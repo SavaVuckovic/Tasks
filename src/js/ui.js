@@ -2,6 +2,7 @@ import {
   setActiveProject,
   getActiveProjectID,
   createProject,
+  deleteProject,
   createTask,
   deleteTask,
 } from './index';
@@ -30,6 +31,11 @@ function renderProjects(projects, activeProjectID) {
     }
     // add listener for selecting active project
     projectDiv.addEventListener('click', () => setActiveProject(project.id));
+    // delete icon
+    const deleteIcon = document.createElement('i');
+    deleteIcon.classList.add('fas');
+    deleteIcon.classList.add('fa-trash-alt');
+    deleteIcon.addEventListener('click', () => openDeleteModal(project.id));
     // name
     const name = document.createElement('h3');
     name.innerText = project.name;
@@ -37,6 +43,7 @@ function renderProjects(projects, activeProjectID) {
     const description = document.createElement('p');
     description.innerText = project.description;
     // populate and append to project list
+    projectDiv.appendChild(deleteIcon);
     projectDiv.appendChild(name);
     projectDiv.appendChild(description);
     projectList.appendChild(projectDiv);
@@ -64,10 +71,7 @@ function createTaskDiv(task) {
   const deleteIcon = document.createElement('i');
   deleteIcon.classList.add('fas');
   deleteIcon.classList.add('fa-trash-alt');
-  // delete icon event listener
-  deleteIcon.addEventListener('click', () => {
-    openDeleteModal(task, deleteTask);
-  });
+  deleteIcon.addEventListener('click', () => openDeleteModal(task));
   // populate wrapper with icons
   icons.appendChild(expand);
   icons.appendChild(deleteIcon);
@@ -252,14 +256,20 @@ function createDeleteForm(callback) {
 }
 
 // open delete modal
-function openDeleteModal(task, deleteTask) {
+function openDeleteModal(item) {
   // show the modal
   deleteModal.style.display = 'block';
   // populate the modal body with delete form
   const body = document.querySelector('div#delete-modal .modal-body');
-  const form = createDeleteForm(() => {
-    deleteTask(task.title, getActiveProjectID());
-  });
+  let callbackFunc;
+  if (typeof item === 'string') {
+    // project ID was passed in
+    callbackFunc = () => deleteProject(item);
+  } else {
+    // task object was passed in
+    callbackFunc = () => deleteTask(item.title, getActiveProjectID());
+  }
+  const form = createDeleteForm(callbackFunc);
   body.appendChild(form);
   // close button
   const close = document.querySelector('div#delete-modal .modal-close');

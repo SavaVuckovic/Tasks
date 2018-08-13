@@ -35,13 +35,22 @@ function saveTask(task) {
 }
 
 // delete project from localStorage
-
+function deleteProject(id) {
+  const projects = fetchProjects();
+  localStorage.setItem('projects', JSON.stringify(projects.filter(project => project.id !== id)))
+}
 
 // delete task from localStorage
+function deleteTask(name) {
+  const tasks = fetchTasks();
+  localStorage.setItem('tasks', JSON.stringify(tasks.filter(task => task.title !== name)));
+}
 
 export default {
   fetchProjects,
   fetchTasks,
   saveProject,
-  saveTask
+  saveTask,
+  deleteProject,
+  deleteTask
 };

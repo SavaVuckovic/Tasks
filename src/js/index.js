@@ -31,6 +31,18 @@ export function createProject(projectObj) {
   ui.renderTasks(tasks, activeProjectID);
 }
 
+// delete a project
+export function deleteProject(id) {
+  // find project index
+  projects.forEach((project, index) => {
+    if (project.id === id) {
+      projects.splice(index, 1);
+      storage.deleteProject(id);
+      ui.renderProjects(projects, activeProjectID);
+    }
+  });
+}
+
 // create a task
 export function createTask(taskObj) {
   const task = new Task(taskObj);
@@ -42,10 +54,10 @@ export function createTask(taskObj) {
 // delete task
 export function deleteTask(taskName, projectID) {
   // find task index
-  tasks.forEach(task => {
+  tasks.forEach((task, index) => {
     if (task.title === taskName && task.projectID === projectID) {
-      const index = tasks.indexOf(task);
       tasks.splice(index, 1);
+      storage.deleteTask(taskName);
       ui.renderTasks(tasks, activeProjectID);
     }
   });
