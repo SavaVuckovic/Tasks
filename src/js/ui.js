@@ -105,11 +105,13 @@ function createNewProjectForm() {
   nameInput.setAttribute('type', 'text');
   nameInput.setAttribute('name', 'name');
   nameInput.setAttribute('placeholder', 'Project Name');
+  nameInput.required = true;
   // description input
   const descriptionInput = document.createElement('input');
   descriptionInput.setAttribute('type', 'text');
   descriptionInput.setAttribute('name', 'description');
   descriptionInput.setAttribute('placeholder', 'Project Description');
+  descriptionInput.required = true;
   // submit button
   const submit = document.createElement('button');
   submit.setAttribute('type', 'submit');
@@ -155,11 +157,13 @@ function createNewTaskForm() {
   titleInput.setAttribute('type', 'text');
   titleInput.setAttribute('name', 'title');
   titleInput.setAttribute('placeholder', 'Task Title');
+  titleInput.required = true;
   // description input
   const descriptionInput = document.createElement('input');
   descriptionInput.setAttribute('type', 'text');
   descriptionInput.setAttribute('name', 'description');
   descriptionInput.setAttribute('placeholder', 'Task Description');
+  descriptionInput.required = true;
   // due date input
   const dueDateWrapper = document.createElement('div');
   dueDateWrapper.classList.add('input-wrapper');
@@ -169,6 +173,7 @@ function createNewTaskForm() {
   const dueDateInput = document.createElement('input');
   dueDateInput.setAttribute('type', 'date');
   dueDateInput.setAttribute('name', 'due-date');
+  dueDateInput.required = true;
   dueDateWrapper.appendChild(dueDateLabel);
   dueDateWrapper.appendChild(dueDateInput);
   // priority input
@@ -179,6 +184,7 @@ function createNewTaskForm() {
   priorityLabel.innerText = 'Priority';
   const priorityInput = document.createElement('select');
   priorityInput.setAttribute('name', 'priority');
+  priorityInput.required = true;
   const priorityOptions = ['low', 'medium', 'high'];
   priorityOptions.forEach(opt => {
     const option = document.createElement('option');
