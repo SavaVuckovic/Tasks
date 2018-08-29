@@ -5,7 +5,7 @@ import {
   deleteProject,
   createTask,
   deleteTask,
-} from './index';
+} from './app_logic';
 
 // select important DOM elements
 const newProject = document.querySelector('#new-project');
@@ -16,84 +16,66 @@ const newProjectModal = document.querySelector('#new-project-modal');
 const newTaskModal = document.querySelector('#new-task-modal');
 const deleteModal = document.querySelector('#delete-modal');
 
-// render projects
-function renderProjects(projects, activeProjectID) {
-  // clear projects list
-  while (projectList.hasChildNodes()) {
-    projectList.removeChild(projectList.lastChild);
+// used for clearing projects/tasks in the UI
+function clearList(list) {
+  while (list.hasChildNodes()) {
+    list.removeChild(list.lastChild);
   }
-  projects.forEach(project => {
-    // project div
-    const projectDiv = document.createElement('div');
-    projectDiv.classList.add('project');
-    if (project.id === activeProjectID) {
-      projectDiv.classList.add('active');
-    }
-    // add listener for selecting active project
-    projectDiv.addEventListener('click', () => setActiveProject(project.id));
-    // delete icon
-    const deleteIcon = document.createElement('i');
-    deleteIcon.classList.add('fas');
-    deleteIcon.classList.add('fa-trash-alt');
-    deleteIcon.addEventListener('click', () => openDeleteModal(project.id));
-    // name
-    const name = document.createElement('h3');
-    name.innerText = project.name;
-    // description
-    const description = document.createElement('p');
-    description.innerText = project.description;
-    // populate and append to project list
-    projectDiv.appendChild(deleteIcon);
-    projectDiv.appendChild(name);
-    projectDiv.appendChild(description);
-    projectList.appendChild(projectDiv);
+}
+
+// creates single project element
+function createProjectElement(project) {
+  // clone the template
+  const projectTemplate = document.querySelector('#project-template .project');
+  const newProject = projectTemplate.cloneNode(true);
+  // populate with correct info
+  newProject.querySelector('.name').innerText = project.name;
+  newProject.querySelector('.description').innerText = project.description;
+  if (project.id === getActiveProjectID()) {
+    newProject.classList.add('active');
+  }
+  // add event listeners
+  newProject.addEventListener('click', () => setActiveProject(project.id));
+  newProject.querySelector('.fa-trash-alt').addEventListener('click', () => openDeleteModal(project.id));
+
+  return newProject;
+}
+
+// render projects
+function renderProjects(projects) {
+  // clear projects list
+  clearList(projectList);
+  // create project elements in the UI for each project
+  const projectElements = projects.map(project => {
+    const projectElem = createProjectElement(project);
+    projectList.appendChild(projectElem);
   });
 }
 
 // create single task element
-function createTaskDiv(task) {
-  // task div
-  const taskDiv = document.createElement('div');
-  taskDiv.classList.add('task');
-  // render border color based on priority
-  taskDiv.classList.add(task.priority);
-  // title
-  const title = document.createElement('h3');
-  title.innerText = task.title;
-  // icons wrapper
-  const icons = document.createElement('div');
-  icons.classList.add('icons-wrapper');
-  // expand icon
-  const expand = document.createElement('i');
-  expand.classList.add('fas');
-  expand.classList.add('fa-arrow-down');
-  // delete icon
-  const deleteIcon = document.createElement('i');
-  deleteIcon.classList.add('fas');
-  deleteIcon.classList.add('fa-trash-alt');
-  deleteIcon.addEventListener('click', () => openDeleteModal(task));
-  // populate wrapper with icons
-  icons.appendChild(expand);
-  icons.appendChild(deleteIcon);
-  // populate and append to tasks list
-  taskDiv.appendChild(title);
-  taskDiv.appendChild(icons);
+function createTaskElement(task) {
+  // clone the template
+  const taskTemplate = document.querySelector('#task-template .task');
+  const newTask = taskTemplate.cloneNode(true);
+  // populate with correct info, set border color based on priority
+  newTask.classList.add(task.priority);
+  newTask.querySelector('.title').innerText = task.title;
+  // add delete event listener
+  newTask.querySelector('.fa-trash-alt').addEventListener('click', () => openDeleteModal(task));
 
-  return taskDiv;
+  return newTask;
 }
 
 // render tasks
 function renderTasks(tasks, activeProjectID) {
   // clear tasks list
-  while (tasksList.hasChildNodes()) {
-    tasksList.removeChild(tasksList.lastChild);
-  }
-  // render only tasks that belong to active project
+  clearList(tasksList);
+  // render to the UI only tasks that belong to active project
   tasks
-    .filter(task => task.projectID === activeProjectID)
+    .filter(task => task.projectID === getActiveProjectID())
     .forEach(task => {
-      const taskDiv = createTaskDiv(task);
-      tasksList.appendChild(taskDiv);
+      const taskElem = createTaskElement(task);
+      tasksList.appendChild(taskElem);
     });
 }
 

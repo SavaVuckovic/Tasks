@@ -8,14 +8,13 @@ let projects;
 let tasks;
 let activeProjectID;
 
-function initEverything() {
+export default function initEverything() {
   // get projects and tasks from localStorage and render them
   projects = storage.fetchProjects();
   tasks = storage.fetchTasks();
 
   if (projects.length > 0) {
-    activeProjectID = projects[0].id;
-    render();
+    setActiveProject(projects[0].id);
   } else {
     // create default project if localStorage is empty
     const defaultProjectObj = {
@@ -30,14 +29,19 @@ function initEverything() {
   ui.addEventListeners();
 }
 
-// renders projects and tasks
-function render() {
-  ui.renderProjects(projects, activeProjectID);
-  ui.renderTasks(tasks, activeProjectID);
+// return active project ID
+export function getActiveProjectID() {
+  return activeProjectID;
+}
+
+// set active project ID
+export function setActiveProject(id) {
+  activeProjectID = id;
+  render();
 }
 
 // create a project
-function createProject(projectObj) {
+export function createProject(projectObj) {
   const project = new Project(uniqid(), projectObj);
   projects.push(project);
   storage.saveProject(project);
@@ -45,7 +49,7 @@ function createProject(projectObj) {
 }
 
 // delete a project
-function deleteProject(id) {
+export function deleteProject(id) {
   // find project index
   projects.forEach((project, index) => {
     if (project.id === id) {
@@ -57,7 +61,7 @@ function deleteProject(id) {
 }
 
 // create a task
-function createTask(taskObj) {
+export function createTask(taskObj) {
   const task = new Task(taskObj);
   tasks.push(task);
   storage.saveTask(task);
@@ -65,7 +69,7 @@ function createTask(taskObj) {
 }
 
 // delete task
-function deleteTask(taskName, projectID) {
+export function deleteTask(taskName, projectID) {
   // find task index
   tasks.forEach((task, index) => {
     if (task.title === taskName && task.projectID === projectID) {
@@ -76,4 +80,8 @@ function deleteTask(taskName, projectID) {
   });
 }
 
-export default initEverything;
+// renders projects and tasks
+function render() {
+  ui.renderProjects(projects, activeProjectID);
+  ui.renderTasks(tasks, activeProjectID);
+}
