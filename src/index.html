@@ -99,7 +99,7 @@
   <div class="template" id="task-form-template">
     <form>
       <input type="text" name="title" placeholder="Task Title" required>
-      <input type="text" name="description" value="Task Description" required>
+      <input type="text" name="description" placeholder="Task Description" required>
       <div class="input-wrapper">
         <label for="due-date">Due Date</label>
         <input type="date" name="due-date" required>
@@ -113,6 +113,14 @@
         </select>
       </div>
       <button type="submit">Create</button>
+    </form>
+  </div>
+
+  <!-- Delete Form Template -->
+  <div class="template" id="delete-form-template">
+    <form id="delete-form">
+      <button id="delete-btn" type="submit">Delete</button>
+      <button id="cancel-btn">Cancel</button>
     </form>
   </div>
 

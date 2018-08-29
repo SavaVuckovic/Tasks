@@ -16,8 +16,8 @@ const newProjectModal = document.querySelector('#new-project-modal');
 const newTaskModal = document.querySelector('#new-task-modal');
 const deleteModal = document.querySelector('#delete-modal');
 
-// used for clearing projects/tasks in the UI
-function clearList(list) {
+// used for clearing element contents in the UI
+function clearContent(list) {
   while (list.hasChildNodes()) {
     list.removeChild(list.lastChild);
   }
@@ -44,7 +44,7 @@ function createProjectElement(project) {
 // render projects
 function renderProjects(projects) {
   // clear projects list
-  clearList(projectList);
+  clearContent(projectList);
   // create project elements in the UI for each project
   const projectElements = projects.map(project => {
     const projectElem = createProjectElement(project);
@@ -69,7 +69,7 @@ function createTaskElement(task) {
 // render tasks
 function renderTasks(tasks) {
   // clear tasks list
-  clearList(tasksList);
+  clearContent(tasksList);
   // render to the UI only tasks that belong to active project
   tasks
     .filter(task => task.projectID === getActiveProjectID())
@@ -151,22 +151,11 @@ function openNewTaskModal() {
 
 // create delete form
 function createDeleteForm(callback) {
-  const form = document.createElement('form');
-  form.setAttribute('id', 'delete-form');
-  // delete button
-  const deleteBtn = document.createElement('button');
-  deleteBtn.innerText = 'Delete';
-  deleteBtn.setAttribute('id', 'delete-btn');
-  deleteBtn.setAttribute('type', 'submit');
-  deleteBtn.addEventListener('click', callback);
-  // cancel button
-  const cancelBtn = document.createElement('button');
-  cancelBtn.innerText = 'Cancel';
-  cancelBtn.setAttribute('id', 'cancel-btn');
-  // populate form
-  form.appendChild(deleteBtn);
-  form.appendChild(cancelBtn);
-  // when form is submitted
+  // clone the template
+  const formTemplate = document.querySelector('#delete-form-template form');
+  const form = formTemplate.cloneNode(true);
+  // set event listeners
+  form.querySelector('#delete-btn').addEventListener('click', callback);
   form.addEventListener('submit', e => {
     e.preventDefault();
     closeModal(deleteModal);
@@ -200,16 +189,9 @@ function openDeleteModal(item) {
 function closeModal(modal) {
   // empty modal body content
   const modalBody = document.querySelector(`div#${modal.getAttribute('id')} .modal-body`);
-  while (modalBody.hasChildNodes()) {
-    modalBody.removeChild(modalBody.lastChild);
-  }
+  clearContent(modalBody);
   // hide the modal
   modal.style.display = 'none';
-}
-
-// expand/shrink task
-function toggleTaskInfo() {
-  console.log('clicked');
 }
 
 // add event listeners
