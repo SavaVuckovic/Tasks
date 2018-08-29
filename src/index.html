@@ -95,5 +95,26 @@
     </form>
   </div>
 
+  <!-- Task Form Template -->
+  <div class="template" id="task-form-template">
+    <form>
+      <input type="text" name="title" placeholder="Task Title" required>
+      <input type="text" name="description" value="Task Description" required>
+      <div class="input-wrapper">
+        <label for="due-date">Due Date</label>
+        <input type="date" name="due-date" required>
+      </div>
+      <div class="input-wrapper">
+        <label for="priority">Priority</label>
+        <select name="priority" required>
+          <option value="low">low</option>
+          <option value="medium">medium</option>
+          <option value="high">high</option>
+        </select>
+      </div>
+      <button type="submit">Create</button>
+    </form>
+  </div>
+
 </body>
 </html>

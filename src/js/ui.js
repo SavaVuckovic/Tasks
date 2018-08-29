@@ -67,7 +67,7 @@ function createTaskElement(task) {
 }
 
 // render tasks
-function renderTasks(tasks, activeProjectID) {
+function renderTasks(tasks) {
   // clear tasks list
   clearList(tasksList);
   // render to the UI only tasks that belong to active project
@@ -115,60 +115,10 @@ function openNewProjectModal() {
 
 // create new task form
 function createNewTaskForm() {
-  const form = document.createElement('form');
-  // title input
-  const titleInput = document.createElement('input');
-  titleInput.setAttribute('type', 'text');
-  titleInput.setAttribute('name', 'title');
-  titleInput.setAttribute('placeholder', 'Task Title');
-  titleInput.required = true;
-  // description input
-  const descriptionInput = document.createElement('input');
-  descriptionInput.setAttribute('type', 'text');
-  descriptionInput.setAttribute('name', 'description');
-  descriptionInput.setAttribute('placeholder', 'Task Description');
-  descriptionInput.required = true;
-  // due date input
-  const dueDateWrapper = document.createElement('div');
-  dueDateWrapper.classList.add('input-wrapper');
-  const dueDateLabel = document.createElement('label');
-  dueDateLabel.setAttribute('for', 'due-date');
-  dueDateLabel.innerText = 'Due Date';
-  const dueDateInput = document.createElement('input');
-  dueDateInput.setAttribute('type', 'date');
-  dueDateInput.setAttribute('name', 'due-date');
-  dueDateInput.required = true;
-  dueDateWrapper.appendChild(dueDateLabel);
-  dueDateWrapper.appendChild(dueDateInput);
-  // priority input
-  const priorityWrapper = document.createElement('div');
-  priorityWrapper.classList.add('input-wrapper');
-  const priorityLabel = document.createElement('label');
-  priorityLabel.setAttribute('for', 'priority');
-  priorityLabel.innerText = 'Priority';
-  const priorityInput = document.createElement('select');
-  priorityInput.setAttribute('name', 'priority');
-  priorityInput.required = true;
-  const priorityOptions = ['low', 'medium', 'high'];
-  priorityOptions.forEach(opt => {
-    const option = document.createElement('option');
-    option.innerText = opt;
-    option.setAttribute('value', opt);
-    priorityInput.appendChild(option);
-  });
-  priorityWrapper.appendChild(priorityLabel);
-  priorityWrapper.appendChild(priorityInput);
-  // submit button
-  const submit = document.createElement('button');
-  submit.setAttribute('type', 'submit');
-  submit.innerText = 'Create';
-  // populate form
-  form.appendChild(titleInput);
-  form.appendChild(descriptionInput);
-  form.appendChild(dueDateWrapper);
-  form.appendChild(priorityWrapper);
-  form.appendChild(submit);
-  // when form is submitted
+  // clone the template
+  const formTemplate = document.querySelector('#task-form-template form');
+  const form = formTemplate.cloneNode(true);
+  // add submit event listener
   form.addEventListener('submit', e => {
     e.preventDefault();
     // extract form values

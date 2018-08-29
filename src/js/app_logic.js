@@ -82,6 +82,6 @@ export function deleteTask(taskName, projectID) {
 
 // renders projects and tasks
 function render() {
-  ui.renderProjects(projects, activeProjectID);
-  ui.renderTasks(tasks, activeProjectID);
+  ui.renderProjects(projects);
+  ui.renderTasks(tasks);
 }
