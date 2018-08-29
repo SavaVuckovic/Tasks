@@ -5,6 +5,7 @@ import {
   deleteProject,
   createTask,
   deleteTask,
+  completeTask
 } from './app_logic';
 
 // select important DOM elements
@@ -58,10 +59,19 @@ function createTaskElement(task) {
   const taskTemplate = document.querySelector('#task-template .task');
   const newTask = taskTemplate.cloneNode(true);
   // populate with correct info, set border color based on priority
-  newTask.classList.add(task.priority);
+  if (task.complete) {
+    newTask.classList.add('complete');
+  } else {
+    newTask.classList.add(task.priority);
+  }
   newTask.querySelector('.title').innerText = task.title;
-  // add delete event listener
+  // add event listeners
   newTask.querySelector('.fa-trash-alt').addEventListener('click', () => openDeleteModal(task));
+  newTask.querySelector('.fa-check').addEventListener('click', () => {
+    completeTask(task);
+
+    // add competed styles
+  });
 
   return newTask;
 }

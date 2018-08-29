@@ -87,6 +87,16 @@ export function deleteTask(taskName, projectID) {
   });
 }
 
+export function completeTask(task) {
+  tasks.forEach(t => {
+    if (t.title === task.title) {
+      t.complete = true;
+    }
+  });
+  storage.completeTask(task);
+  render();
+}
+
 // renders projects and tasks
 function render() {
   ui.renderProjects(projects);
