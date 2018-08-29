@@ -45,7 +45,7 @@ export function createProject(projectObj) {
   const project = new Project(uniqid(), projectObj);
   projects.push(project);
   storage.saveProject(project);
-  render();
+  setActiveProject(project.id);
 }
 
 // delete a project
@@ -55,9 +55,16 @@ export function deleteProject(id) {
     if (project.id === id) {
       projects.splice(index, 1);
       storage.deleteProject(id);
-      render();
+      // also delete all tasks belonging to that project
+      tasks.forEach((task, index) => {
+        if (task.projectID === id) {
+          tasks.splice(index, 1);
+          storage.deleteTask(task.title);
+        }
+      });
     }
   });
+  setActiveProject(0);
 }
 
 // create a task
