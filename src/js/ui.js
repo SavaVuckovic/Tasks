@@ -81,28 +81,10 @@ function renderTasks(tasks, activeProjectID) {
 
 // create new project form
 function createNewProjectForm() {
-  const form = document.createElement('form');
-  // name input
-  const nameInput = document.createElement('input');
-  nameInput.setAttribute('type', 'text');
-  nameInput.setAttribute('name', 'name');
-  nameInput.setAttribute('placeholder', 'Project Name');
-  nameInput.required = true;
-  // description input
-  const descriptionInput = document.createElement('input');
-  descriptionInput.setAttribute('type', 'text');
-  descriptionInput.setAttribute('name', 'description');
-  descriptionInput.setAttribute('placeholder', 'Project Description');
-  descriptionInput.required = true;
-  // submit button
-  const submit = document.createElement('button');
-  submit.setAttribute('type', 'submit');
-  submit.innerText = 'Create';
-  // populate form
-  form.appendChild(nameInput);
-  form.appendChild(descriptionInput);
-  form.appendChild(submit);
-  // when form is submitted
+  // clone the template
+  const formTemplate = document.querySelector('#project-form-template form');
+  const form = formTemplate.cloneNode(true);
+  // add submit event listener
   form.addEventListener('submit', e => {
     e.preventDefault();
     // extract form values
