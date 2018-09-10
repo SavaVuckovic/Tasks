@@ -97,6 +97,27 @@ export function completeTask(task) {
   render();
 }
 
+export function sortTasksByPriority(tasks) {
+  const low = [];
+  const medium = [];
+  const high = [];
+  const complete = [];
+
+  tasks.forEach(task => {
+    if (task.complete) {
+      complete.push(task);
+    } else if (task.priority === 'low') {
+      low.push(task);
+    } else if (task.priority === 'medium') {
+      medium.push(task);
+    } else if (task.priority === 'high') {
+      high.push(task);
+    }
+  });
+
+  return [...high, ...medium, ...low, ...complete];
+}
+
 // renders projects and tasks
 function render() {
   ui.renderProjects(projects);

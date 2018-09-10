@@ -6,7 +6,8 @@ import {
   deleteProject,
   createTask,
   deleteTask,
-  completeTask
+  completeTask,
+  sortTasksByPriority
 } from './app_logic';
 
 // select important DOM elements
@@ -66,6 +67,7 @@ function createTaskElement(task) {
     newTask.classList.add(task.priority);
   }
   newTask.querySelector('.title').innerText = task.title;
+  newTask.querySelector('.description').innerText = task.description;
   newTask.querySelector('.due-date').innerText = `Due date: ${formatDueDate(task.dueDate)}`;
   // add event listeners
   newTask.querySelector('.fa-trash-alt').addEventListener('click', () => openDeleteModal(task));
@@ -75,16 +77,16 @@ function createTaskElement(task) {
 }
 
 // render tasks
-function renderTasks(tasks) {
+function renderTasks(allTasks) {
   // clear tasks list
   clearContent(tasksList);
   // render to the UI only tasks that belong to active project
-  tasks
-    .filter(task => task.projectID === getActiveProjectID())
-    .forEach(task => {
-      const taskElem = createTaskElement(task);
-      tasksList.appendChild(taskElem);
-    });
+  const projectTasks = allTasks.filter(task => task.projectID === getActiveProjectID());
+  const sortedTasks = sortTasksByPriority(projectTasks);
+  sortedTasks.forEach(task => {
+    const taskElem = createTaskElement(task);
+    tasksList.appendChild(taskElem);
+  });
 }
 
 // create new project form
