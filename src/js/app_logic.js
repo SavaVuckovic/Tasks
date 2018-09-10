@@ -76,10 +76,10 @@ export function createTask(taskObj) {
 }
 
 // delete task
-export function deleteTask(taskName, projectID) {
+export function deleteTask(taskName) {
   // find task index
   tasks.forEach((task, index) => {
-    if (task.title === taskName && task.projectID === projectID) {
+    if (task.title === taskName && task.projectID === activeProjectID) {
       tasks.splice(index, 1);
       storage.deleteTask(taskName);
       render();

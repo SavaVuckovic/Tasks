@@ -1,3 +1,4 @@
+import formatDueDate from './date_helper';
 import {
   setActiveProject,
   getActiveProjectID,
@@ -65,13 +66,10 @@ function createTaskElement(task) {
     newTask.classList.add(task.priority);
   }
   newTask.querySelector('.title').innerText = task.title;
+  newTask.querySelector('.due-date').innerText = `Due date: ${formatDueDate(task.dueDate)}`;
   // add event listeners
   newTask.querySelector('.fa-trash-alt').addEventListener('click', () => openDeleteModal(task));
-  newTask.querySelector('.fa-check').addEventListener('click', () => {
-    completeTask(task);
-
-    // add competed styles
-  });
+  newTask.querySelector('.fa-check').addEventListener('click', () => completeTask(task));
 
   return newTask;
 }
@@ -186,7 +184,7 @@ function openDeleteModal(item) {
     callbackFunc = () => deleteProject(item);
   } else {
     // task object was passed in
-    callbackFunc = () => deleteTask(item.title, getActiveProjectID());
+    callbackFunc = () => deleteTask(item.title);
   }
   const form = createDeleteForm(callbackFunc);
   body.appendChild(form);

@@ -18,8 +18,13 @@
     color: $white;
     display: flex;
     align-items: center;
-    .title {
-      margin: 0;
+    .info-wrapper {
+      .title {
+        margin: 0;
+      }
+      .due-date {
+        margin: 12px 0 0;
+      }
     }
     .icons-wrapper {
       margin-left: auto;
