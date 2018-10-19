@@ -16,12 +16,7 @@ export default function initEverything() {
   if (projects.length > 0) {
     setActiveProject(projects[0].id);
   } else {
-    // create default project if localStorage is empty
-    const defaultProjectObj = {
-      name: 'Default Project',
-      description: 'Project description goes here'
-    };
-    createProject(defaultProjectObj);
+    createDefaultProject();
     render();
   }
 
@@ -46,6 +41,15 @@ export function createProject(projectObj) {
   projects.push(project);
   storage.saveProject(project);
   setActiveProject(project.id);
+}
+
+// create a default project
+export function createDefaultProject() {
+  const defaultProjectObj = {
+    name: 'Default Project',
+    description: 'Project description goes here'
+  };
+  createProject(defaultProjectObj);
 }
 
 // delete a project
