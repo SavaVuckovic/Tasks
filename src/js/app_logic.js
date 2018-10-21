@@ -54,21 +54,19 @@ export function createDefaultProject() {
 
 // delete a project
 export function deleteProject(id) {
-  // find project index
-  projects.forEach((project, index) => {
-    if (project.id === id) {
-      projects.splice(index, 1);
-      storage.deleteProject(id);
-      // also delete all tasks belonging to that project
-      tasks.forEach((task, index) => {
-        if (task.projectID === id) {
-          tasks.splice(index, 1);
-          storage.deleteTask(task.title);
-        }
-      });
-    }
-  });
+  const projectToDel = projects.filter(project => project.id === id);
+  projects.splice(projects.indexOf(projectToDel), 1);
+  storage.deleteProject(projectToDel.id);
   setActiveProject(0);
+}
+
+// delete all tasks that belong to specific project
+export function deleteProjectTasks(projectID) {
+  const tasksToDel = tasks.filter(task => task.projectID === projectID);
+  tasksToDel.forEach(task => {
+    tasks.splice(tasks.indexOf(task), 1);
+    storage.deleteTask(task.title);
+  });
 }
 
 // create a task

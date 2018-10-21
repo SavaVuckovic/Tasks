@@ -7,7 +7,8 @@ import {
   createTask,
   deleteTask,
   completeTask,
-  sortTasksByPriority
+  sortTasksByPriority,
+  deleteProjectTasks
 } from './app_logic';
 
 // select important DOM elements
@@ -183,7 +184,10 @@ function openDeleteModal(item) {
   let callbackFunc;
   if (typeof item === 'string') {
     // project ID was passed in
-    callbackFunc = () => deleteProject(item);
+    callbackFunc = () => {
+      deleteProject(item);
+      deleteProjectTasks(item);
+    }
   } else {
     // task object was passed in
     callbackFunc = () => deleteTask(item.title);
