@@ -100,23 +100,10 @@ export function completeTask(task) {
 }
 
 export function sortTasksByPriority(tasks) {
-  const low = [];
-  const medium = [];
-  const high = [];
-  const complete = [];
-
-  tasks.forEach(task => {
-    if (task.complete) {
-      complete.push(task);
-    } else if (task.priority === 'low') {
-      low.push(task);
-    } else if (task.priority === 'medium') {
-      medium.push(task);
-    } else if (task.priority === 'high') {
-      high.push(task);
-    }
-  });
-
+  const low = tasks.filter(task => task.priority === 'low' && !task.complete);
+  const medium = tasks.filter(task => task.priority === 'medium' && !task.complete);
+  const high = tasks.filter(task => task.priority === 'high' && !task.complete);
+  const complete = tasks.filter(task => task.complete);
   return [...high, ...medium, ...low, ...complete];
 }
 
