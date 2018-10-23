@@ -47,7 +47,7 @@ export function createDefaultProject() {
 
 // delete a project
 export function deleteProject(id) {
-  const projectToDel = projects.filter(project => project.id === id);
+  const projectToDel = projects.find(project => project.id === id);
   projects.splice(projects.indexOf(projectToDel), 1);
   storage.deleteProject(projectToDel.id);
   setActiveProject(0);

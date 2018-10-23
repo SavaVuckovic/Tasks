@@ -47,6 +47,7 @@ function completeTask(task) {
 
 // delete project from localStorage
 function deleteProject(id) {
+  console.log('ID: ' + id);
   const projects = fetchProjects();
   localStorage.setItem('projects', JSON.stringify(projects.filter(project => project.id !== id)))
 }

@@ -66,7 +66,11 @@ function createProjectElement(project) {
     newProject.classList.add('active');
   }
   // add event listeners
-  newProject.addEventListener('click', () => setActiveProject(project.id));
+  newProject.addEventListener('click', () => {
+    setActiveProject(project.id);
+    renderProjects(getProjects());
+    renderTasks(getTasks());
+  });
   newProject.querySelector('.fa-trash-alt').addEventListener('click', () => openDeleteModal(project.id));
 
   return newProject;
@@ -112,6 +116,7 @@ function createNewProjectForm() {
     // pass that object to create function & close the modal
     createProject(projectObj);
     renderProjects(getProjects());
+    renderTasks(getTasks());
     closeModal(newProjectModal);
   });
 
@@ -196,6 +201,7 @@ function openDeleteModal(item) {
       deleteProject(item);
       deleteProjectTasks(item);
       renderProjects(getProjects());
+      renderTasks(getTasks());
     }
   } else {
     // task object was passed in

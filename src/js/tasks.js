@@ -1,4 +1,5 @@
 import storage from './storage';
+import { getActiveProjectID } from './projects';
 
 class Task {
   constructor({ projectID, title, description, dueDate, priority }) {
@@ -41,7 +42,7 @@ export function completeTask(task) {
 export function deleteTask(taskName) {
   // find task index
   tasks.forEach((task, index) => {
-    if (task.title === taskName && task.projectID === activeProjectID) {
+    if (task.title === taskName && task.projectID === getActiveProjectID()) {
       tasks.splice(index, 1);
       storage.deleteTask(taskName);
     }
