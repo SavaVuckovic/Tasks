@@ -1,8 +1,16 @@
 import '../scss/main.scss';
 import '../index.html';
-import { setProjects, setActiveProject, createDefaultProject } from './projects';
+import storage from './storage';
 import { setTasks } from './tasks';
-import { render, addEventListeners } from './ui'
+import { 
+  setProjects, 
+  setActiveProject, 
+  createDefaultProject } from './projects';
+import { 
+  renderProjects,
+  renderTasks,
+  addEventListeners 
+} from './ui'
 
 export default function initEverything() {
   // get projects and tasks from localStorage and render them
@@ -17,7 +25,8 @@ export default function initEverything() {
     createDefaultProject();
   }
 
-  render();
+  renderProjects(projects);
+  renderTasks(tasks);
   // add modal listeners
   addEventListeners();
 }

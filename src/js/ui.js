@@ -1,9 +1,18 @@
 import formatDueDate from './date_helper';
 import {
-
+  getTasks,
+  createTask,
+  completeTask,
+  deleteTask,
+  deleteProjectTasks,
+  sortTasksByPriority
 } from './tasks';
 import {
-
+  getProjects,
+  getActiveProjectID,
+  setActiveProject,
+  createProject,
+  deleteProject
 } from './projects';
 
 // select important DOM elements
@@ -15,11 +24,34 @@ const newProjectModal = document.querySelector('#new-project-modal');
 const newTaskModal = document.querySelector('#new-task-modal');
 const deleteModal = document.querySelector('#delete-modal');
 
-// used for clearing element contents in the UI
-function clearContent(list) {
-  while (list.hasChildNodes()) {
-    list.removeChild(list.lastChild);
-  }
+// add event listeners
+export function addEventListeners() {
+  newProject.addEventListener('click', openNewProjectModal);
+  newTask.addEventListener('click', openNewTaskModal);
+}
+
+// render projects
+export function renderProjects(projects) {
+  // clear projects list
+  clearContent(projectList);
+  // create project elements in the UI for each project
+  const projectElements = projects.map(project => {
+    const projectElem = createProjectElement(project);
+    projectList.appendChild(projectElem);
+  });
+}
+
+// render tasks
+export function renderTasks(allTasks) {
+  // clear tasks list
+  clearContent(tasksList);
+  // render to the UI only tasks that belong to active project
+  const projectTasks = allTasks.filter(task => task.projectID === getActiveProjectID());
+  const sortedTasks = sortTasksByPriority(projectTasks);
+  sortedTasks.forEach(task => {
+    const taskElem = createTaskElement(task);
+    tasksList.appendChild(taskElem);
+  });
 }
 
 // creates single project element
@@ -40,17 +72,6 @@ function createProjectElement(project) {
   return newProject;
 }
 
-// render projects
-function renderProjects(projects) {
-  // clear projects list
-  clearContent(projectList);
-  // create project elements in the UI for each project
-  const projectElements = projects.map(project => {
-    const projectElem = createProjectElement(project);
-    projectList.appendChild(projectElem);
-  });
-}
-
 // create single task element
 function createTaskElement(task) {
   // clone the template
@@ -67,22 +88,12 @@ function createTaskElement(task) {
   newTask.querySelector('.due-date').innerText = `Due date: ${formatDueDate(task.dueDate)}`;
   // add event listeners
   newTask.querySelector('.fa-trash-alt').addEventListener('click', () => openDeleteModal(task));
-  newTask.querySelector('.fa-check').addEventListener('click', () => completeTask(task));
+  newTask.querySelector('.fa-check').addEventListener('click', () => {
+    completeTask(task);
+    renderTasks(getTasks());
+  });
 
   return newTask;
-}
-
-// render tasks
-function renderTasks(allTasks) {
-  // clear tasks list
-  clearContent(tasksList);
-  // render to the UI only tasks that belong to active project
-  const projectTasks = allTasks.filter(task => task.projectID === getActiveProjectID());
-  const sortedTasks = sortTasksByPriority(projectTasks);
-  sortedTasks.forEach(task => {
-    const taskElem = createTaskElement(task);
-    tasksList.appendChild(taskElem);
-  });
 }
 
 // create new project form
@@ -100,6 +111,7 @@ function createNewProjectForm() {
     };
     // pass that object to create function & close the modal
     createProject(projectObj);
+    renderProjects(getProjects());
     closeModal(newProjectModal);
   });
 
@@ -136,6 +148,7 @@ function createNewTaskForm() {
       priority: e.target.elements['priority'].value,
     };
     createTask(taskObj);
+    renderTasks(getTasks());
     closeModal(newTaskModal);
   });
 
@@ -182,10 +195,14 @@ function openDeleteModal(item) {
     callbackFunc = () => {
       deleteProject(item);
       deleteProjectTasks(item);
+      renderProjects(getProjects());
     }
   } else {
     // task object was passed in
-    callbackFunc = () => deleteTask(item.title);
+    callbackFunc = () => {
+      deleteTask(item.title);
+      renderTasks(getTasks());
+    };
   }
   const form = createDeleteForm(callbackFunc);
   body.appendChild(form);
@@ -203,14 +220,9 @@ function closeModal(modal) {
   modal.style.display = 'none';
 }
 
-// add event listeners
-function addEventListeners() {
-  newProject.addEventListener('click', openNewProjectModal);
-  newTask.addEventListener('click', openNewTaskModal);
+// used for clearing element contents in the UI
+function clearContent(list) {
+  while (list.hasChildNodes()) {
+    list.removeChild(list.lastChild);
+  }
 }
-
-export default {
-  renderProjects,
-  renderTasks,
-  addEventListeners
-};

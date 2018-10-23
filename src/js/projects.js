@@ -1,4 +1,7 @@
-export class Project {
+import uniqid from 'uniqid';
+import storage from './storage';
+
+class Project {
   constructor(id, { name, description }) {
     this.id = id
     this.name = name;

@@ -1,4 +1,6 @@
-export class Task {
+import storage from './storage';
+
+class Task {
   constructor({ projectID, title, description, dueDate, priority }) {
     this.projectID = projectID;
     this.title = title;
@@ -19,33 +21,11 @@ export function setTasks(tasksArray) {
   tasks = tasksArray;
 }
 
-// delete all tasks that belong to specific project
-export function deleteProjectTasks(projectID) {
-  const tasksToDel = tasks.filter(task => task.projectID === projectID);
-  tasksToDel.forEach(task => {
-    tasks.splice(tasks.indexOf(task), 1);
-    storage.deleteTask(task.title);
-  });
-}
-
 // create a task
 export function createTask(taskObj) {
   const task = new Task(taskObj);
   tasks.push(task);
   storage.saveTask(task);
-  render();
-}
-
-// delete task
-export function deleteTask(taskName) {
-  // find task index
-  tasks.forEach((task, index) => {
-    if (task.title === taskName && task.projectID === activeProjectID) {
-      tasks.splice(index, 1);
-      storage.deleteTask(taskName);
-      render();
-    }
-  });
 }
 
 export function completeTask(task) {
@@ -55,7 +35,26 @@ export function completeTask(task) {
     }
   });
   storage.completeTask(task);
-  render();
+}
+
+// delete task
+export function deleteTask(taskName) {
+  // find task index
+  tasks.forEach((task, index) => {
+    if (task.title === taskName && task.projectID === activeProjectID) {
+      tasks.splice(index, 1);
+      storage.deleteTask(taskName);
+    }
+  });
+}
+
+// delete all tasks that belong to specific project
+export function deleteProjectTasks(projectID) {
+  const tasksToDel = tasks.filter(task => task.projectID === projectID);
+  tasksToDel.forEach(task => {
+    tasks.splice(tasks.indexOf(task), 1);
+    storage.deleteTask(task.title);
+  });
 }
 
 export function sortTasksByPriority(tasks) {
