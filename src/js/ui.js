@@ -1,15 +1,10 @@
 import formatDueDate from './date_helper';
 import {
-  setActiveProject,
-  getActiveProjectID,
-  createProject,
-  deleteProject,
-  createTask,
-  deleteTask,
-  completeTask,
-  sortTasksByPriority,
-  deleteProjectTasks
-} from './app_logic';
+
+} from './tasks';
+import {
+
+} from './projects';
 
 // select important DOM elements
 const newProject = document.querySelector('#new-project');
