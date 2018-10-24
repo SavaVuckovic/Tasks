@@ -2,7 +2,7 @@ import uniqid from 'uniqid';
 import storage from './storage';
 
 export class Project {
-  constructor(id, { name, description }) {
+  constructor(id, name, description) {
     this.id = id
     this.name = name;
     this.description = description;
@@ -29,8 +29,8 @@ export function setActiveProjectID(id) {
 }
 
 // create a project
-export function createProject(projectObj) {
-  const project = new Project(uniqid(), projectObj);
+export function createProject(id, name, description) {
+  const project = new Project(id, name, description);
   projects.push(project);
   storage.saveProject(project);
   setActiveProjectID(project.id);
@@ -38,11 +38,7 @@ export function createProject(projectObj) {
 
 // create a default project
 export function createDefaultProject() {
-  const defaultProjectObj = {
-    name: 'Default Project',
-    description: 'Project description goes here'
-  };
-  createProject(defaultProjectObj);
+  createProject(uniqid(), 'Default Project', 'Project description goes here');
 }
 
 // delete a project

@@ -1,3 +1,4 @@
+import uniqid from 'uniqid';
 import formatDueDate from './date_helper';
 import {
   getTasks,
@@ -108,13 +109,13 @@ function createNewProjectForm() {
   // add submit event listener
   form.addEventListener('submit', e => {
     e.preventDefault();
+    // generate unique ID
+    const id = uniqid();
     // extract form values
-    const projectObj = {
-      name: e.target.elements['name'].value,
-      description: e.target.elements['description'].value,
-    };
+    const name = e.target.elements['name'].value;
+    const description = e.target.elements['description'].value;
     // pass that object to create function & close the modal
-    createProject(projectObj);
+    createProject(id, name, description);
     renderProjects(getProjects());
     renderTasks(getTasks());
     closeModal(newProjectModal);
