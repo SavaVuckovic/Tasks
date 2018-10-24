@@ -1,7 +1,7 @@
 import storage from './storage';
 import { getActiveProjectID } from './projects';
 
-class Task {
+export class Task {
   constructor({ projectID, title, description, dueDate, priority }) {
     this.projectID = projectID;
     this.title = title;
@@ -30,23 +30,16 @@ export function createTask(taskObj) {
 }
 
 export function completeTask(task) {
-  tasks.forEach(t => {
-    if (t.title === task.title) {
-      t.complete = true;
-    }
-  });
+  const taskToComplete = tasks.find(t => t.title === task.title);
+  taskToComplete.complete = true;
   storage.completeTask(task);
 }
 
 // delete task
 export function deleteTask(taskName) {
-  // find task index
-  tasks.forEach((task, index) => {
-    if (task.title === taskName && task.projectID === getActiveProjectID()) {
-      tasks.splice(index, 1);
-      storage.deleteTask(taskName);
-    }
-  });
+  const taskToDel = tasks.find(t => t.title === taskName && t.projectID === getActiveProjectID());
+  tasks.splice(tasks.indexOf(taskToDel), 1);
+  storage.deleteTask(taskName);
 }
 
 // delete all tasks that belong to specific project
