@@ -24,10 +24,10 @@ describe('setting and getting project variables', () => {
   test('setting and getting projects', () => {
     const projectOne = new Project(uniqid(), 'One', 'Desc 1');
     const projectTwo = new Project(uniqid(), 'Two', 'Desc 2');
-    const exampleProjects = [projectOne, projectTwo];
-    setProjects(exampleProjects);
+    const projectsArray = [projectOne, projectTwo];
+    setProjects(projectsArray);
 
-    expect(getProjects()).toEqual(expect.arrayContaining(exampleProjects));
+    expect(getProjects()).toEqual(expect.arrayContaining(projectsArray));
   });
 
   test('setting and getting active project ID', () => {
