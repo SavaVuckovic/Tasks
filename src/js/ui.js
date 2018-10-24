@@ -10,7 +10,7 @@ import {
 import {
   getProjects,
   getActiveProjectID,
-  setActiveProject,
+  setActiveProjectID,
   createProject,
   deleteProject
 } from './projects';
@@ -67,7 +67,7 @@ function createProjectElement(project) {
   }
   // add event listeners
   newProject.addEventListener('click', () => {
-    setActiveProject(project.id);
+    setActiveProjectID(project.id);
     renderProjects(getProjects());
     renderTasks(getTasks());
   });

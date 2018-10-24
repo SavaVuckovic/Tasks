@@ -4,7 +4,7 @@ import storage from './storage';
 import { setTasks } from './tasks';
 import { 
   setProjects, 
-  setActiveProject, 
+  setActiveProjectID, 
   createDefaultProject } from './projects';
 import { 
   renderProjects,
@@ -20,7 +20,7 @@ export default function initEverything() {
   setTasks(tasks);
 
   if (projects.length > 0) {
-    setActiveProject(projects[0].id);
+    setActiveProjectID(projects[0].id);
   } else {
     createDefaultProject();
   }
