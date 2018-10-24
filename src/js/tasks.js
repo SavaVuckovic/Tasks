@@ -2,7 +2,7 @@ import storage from './storage';
 import { getActiveProjectID } from './projects';
 
 export class Task {
-  constructor({ projectID, title, description, dueDate, priority }) {
+  constructor(projectID, title, description, dueDate, priority) {
     this.projectID = projectID;
     this.title = title;
     this.description = description;
@@ -23,8 +23,8 @@ export function setTasks(tasksArray) {
 }
 
 // create a task
-export function createTask(taskObj) {
-  const task = new Task(taskObj);
+export function createTask(projectID, title, description, dueDate, priority) {
+  const task = new Task(projectID, title, description, dueDate, priority);
   tasks.push(task);
   storage.saveTask(task);
 }
