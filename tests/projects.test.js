@@ -4,7 +4,6 @@ import {
   getProjects,
   setProjects,
   getActiveProjectID,
-  setActiveProject,
   createProject,
   createDefaultProject,
   deleteProject,
