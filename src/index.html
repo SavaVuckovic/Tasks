@@ -16,7 +16,7 @@
       <hr>
       <div id="new-project" class="project">
         <i class="fas fa-plus"></i>
-        <h3>Create a new project</h3>
+        <h3 class="name">Create a new project</h3>
       </div>
       <div id="project-list"></div>
     </div>
@@ -27,7 +27,7 @@
       <hr>
       <div id="new-task" class="task">
         <i class="fas fa-plus"></i>
-        <h3>Create a new task</h3>
+        <h3 class="title">Create a new task</h3>
       </div>
       <div id="tasks-list"></div>
     </div>
@@ -69,6 +69,67 @@
     </div>
   </div>
 
-  <script src="main-bundle.js"></script>
+  <!-- Project Template -->
+  <div class="template" id="project-template">
+    <div class="project">
+      <i class="fas fa-trash-alt"></i>
+      <h3 class="name"></h3>
+      <p class="description"></p>
+    </div>
+  </div>
+
+  <!-- Task Template -->
+  <div class="template" id="task-template">
+    <div class="task">
+      <div class="info-wrapper">
+        <h3 class="title"></h3>
+        <p class="description"></p>
+        <p class="due-date"></p>
+      </div>
+      <div class="icons-wrapper">
+        <i class="fas fa-check"></i>
+        <i class="fas fa-trash-alt"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Form template -->
+  <div class="template" id="project-form-template">
+    <form>
+      <input type="text" name="name" placeholder="Project Name" required>
+      <input type="text" name="description" placeholder="Project Description" required>
+      <button type="submit">Create</button>
+    </form>
+  </div>
+
+  <!-- Task Form Template -->
+  <div class="template" id="task-form-template">
+    <form>
+      <input type="text" name="title" placeholder="Task Title" required>
+      <input type="text" name="description" placeholder="Task Description" required>
+      <div class="input-wrapper">
+        <label for="due-date">Due Date</label>
+        <input type="date" name="due-date" required>
+      </div>
+      <div class="input-wrapper">
+        <label for="priority">Priority</label>
+        <select name="priority" required>
+          <option value="low">low</option>
+          <option value="medium">medium</option>
+          <option value="high">high</option>
+        </select>
+      </div>
+      <button type="submit">Create</button>
+    </form>
+  </div>
+
+  <!-- Delete Form Template -->
+  <div class="template" id="delete-form-template">
+    <form id="delete-form">
+      <button id="delete-btn" type="submit">Delete</button>
+      <button id="cancel-btn">Cancel</button>
+    </form>
+  </div>
+
 </body>
 </html>

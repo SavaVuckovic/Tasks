@@ -18,14 +18,18 @@
     color: $white;
     display: flex;
     align-items: center;
-    h3 {
-      margin: 0;
+    .info-wrapper {
+      .title {
+        margin: 0;
+      }
+      .description,
+      .due-date {
+        margin: 8px 0 0;
+      }
     }
     .icons-wrapper {
       margin-left: auto;
-      .fa-arrow-down,
-      .fa-trash-alt {
-        background: $purple-dark;
+      i {
         line-height: 22px;
         padding: 4px;
         font-size: 18px;
@@ -33,9 +37,15 @@
         height: 30px;
         width: 30px;
         text-align: center;
-        margin-left: 12px;
+        background: $purple-dark;
+      }
+      .fa-check {
+        &:hover {
+          color: $green;
+        }
       }
       .fa-trash-alt {
+        margin-left: 8px;
         &:hover {
           background: $redish;
         }
@@ -49,6 +59,14 @@
     }
     &.low {
       border-bottom: 4px solid $cyan;
+    }
+    &.complete {
+      border-bottom: 4px solid $green;
+      .icons-wrapper {
+        .fa-check {
+          color: $green;
+        }
+      }
     }
   }
   #new-task {

@@ -1,11 +1,20 @@
+import uniqid from 'uniqid';
+import formatDueDate from './date_helper';
 import {
-  setActiveProject,
-  getActiveProjectID,
-  createProject,
-  deleteProject,
+  getTasks,
   createTask,
+  completeTask,
   deleteTask,
-} from './index';
+  deleteProjectTasks,
+  sortTasksByPriority
+} from './tasks';
+import {
+  getProjects,
+  getActiveProjectID,
+  setActiveProjectID,
+  createProject,
+  deleteProject
+} from './projects';
 
 // select important DOM elements
 const newProject = document.querySelector('#new-project');
@@ -16,120 +25,99 @@ const newProjectModal = document.querySelector('#new-project-modal');
 const newTaskModal = document.querySelector('#new-task-modal');
 const deleteModal = document.querySelector('#delete-modal');
 
+// add event listeners
+export function addEventListeners() {
+  newProject.addEventListener('click', openNewProjectModal);
+  newTask.addEventListener('click', openNewTaskModal);
+}
+
 // render projects
-function renderProjects(projects, activeProjectID) {
+export function renderProjects(projects) {
   // clear projects list
-  while (projectList.hasChildNodes()) {
-    projectList.removeChild(projectList.lastChild);
-  }
-  projects.forEach(project => {
-    // project div
-    const projectDiv = document.createElement('div');
-    projectDiv.classList.add('project');
-    if (project.id === activeProjectID) {
-      projectDiv.classList.add('active');
-    }
-    // add listener for selecting active project
-    projectDiv.addEventListener('click', () => setActiveProject(project.id));
-    // delete icon
-    const deleteIcon = document.createElement('i');
-    deleteIcon.classList.add('fas');
-    deleteIcon.classList.add('fa-trash-alt');
-    deleteIcon.addEventListener('click', () => openDeleteModal(project.id));
-    // name
-    const name = document.createElement('h3');
-    name.innerText = project.name;
-    // description
-    const description = document.createElement('p');
-    description.innerText = project.description;
-    // populate and append to project list
-    projectDiv.appendChild(deleteIcon);
-    projectDiv.appendChild(name);
-    projectDiv.appendChild(description);
-    projectList.appendChild(projectDiv);
+  clearContent(projectList);
+  // create project elements in the UI for each project
+  const projectElements = projects.map(project => {
+    const projectElem = createProjectElement(project);
+    projectList.appendChild(projectElem);
   });
 }
 
-// create single task element
-function createTaskDiv(task) {
-  // task div
-  const taskDiv = document.createElement('div');
-  taskDiv.classList.add('task');
-  // render border color based on priority
-  taskDiv.classList.add(task.priority);
-  // title
-  const title = document.createElement('h3');
-  title.innerText = task.title;
-  // icons wrapper
-  const icons = document.createElement('div');
-  icons.classList.add('icons-wrapper');
-  // expand icon
-  const expand = document.createElement('i');
-  expand.classList.add('fas');
-  expand.classList.add('fa-arrow-down');
-  // delete icon
-  const deleteIcon = document.createElement('i');
-  deleteIcon.classList.add('fas');
-  deleteIcon.classList.add('fa-trash-alt');
-  deleteIcon.addEventListener('click', () => openDeleteModal(task));
-  // populate wrapper with icons
-  icons.appendChild(expand);
-  icons.appendChild(deleteIcon);
-  // populate and append to tasks list
-  taskDiv.appendChild(title);
-  taskDiv.appendChild(icons);
-
-  return taskDiv;
+// render tasks
+export function renderTasks(allTasks) {
+  // clear tasks list
+  clearContent(tasksList);
+  // render to the UI only tasks that belong to active project
+  const projectTasks = allTasks.filter(task => task.projectID === getActiveProjectID());
+  const sortedTasks = sortTasksByPriority(projectTasks);
+  sortedTasks.forEach(task => {
+    const taskElem = createTaskElement(task);
+    tasksList.appendChild(taskElem);
+  });
 }
 
-// render tasks
-function renderTasks(tasks, activeProjectID) {
-  // clear tasks list
-  while (tasksList.hasChildNodes()) {
-    tasksList.removeChild(tasksList.lastChild);
+// creates single project element
+function createProjectElement(project) {
+  // clone the template
+  const projectTemplate = document.querySelector('#project-template .project');
+  const newProject = projectTemplate.cloneNode(true);
+  // populate with correct info
+  newProject.querySelector('.name').innerText = project.name;
+  newProject.querySelector('.description').innerText = project.description;
+  if (project.id === getActiveProjectID()) {
+    newProject.classList.add('active');
   }
-  // render only tasks that belong to active project
-  tasks
-    .filter(task => task.projectID === activeProjectID)
-    .forEach(task => {
-      const taskDiv = createTaskDiv(task);
-      tasksList.appendChild(taskDiv);
-    });
+  // add event listeners
+  newProject.addEventListener('click', () => {
+    setActiveProjectID(project.id);
+    renderProjects(getProjects());
+    renderTasks(getTasks());
+  });
+  newProject.querySelector('.fa-trash-alt').addEventListener('click', () => openDeleteModal(project.id));
+
+  return newProject;
+}
+
+// create single task element
+function createTaskElement(task) {
+  // clone the template
+  const taskTemplate = document.querySelector('#task-template .task');
+  const newTask = taskTemplate.cloneNode(true);
+  // populate with correct info, set border color based on priority
+  if (task.complete) {
+    newTask.classList.add('complete');
+  } else {
+    newTask.classList.add(task.priority);
+  }
+  newTask.querySelector('.title').innerText = task.title;
+  newTask.querySelector('.description').innerText = task.description;
+  newTask.querySelector('.due-date').innerText = `Due date: ${formatDueDate(task.dueDate)}`;
+  // add event listeners
+  newTask.querySelector('.fa-trash-alt').addEventListener('click', () => openDeleteModal(task));
+  newTask.querySelector('.fa-check').addEventListener('click', () => {
+    completeTask(task);
+    renderTasks(getTasks());
+  });
+
+  return newTask;
 }
 
 // create new project form
 function createNewProjectForm() {
-  const form = document.createElement('form');
-  // name input
-  const nameInput = document.createElement('input');
-  nameInput.setAttribute('type', 'text');
-  nameInput.setAttribute('name', 'name');
-  nameInput.setAttribute('placeholder', 'Project Name');
-  nameInput.required = true;
-  // description input
-  const descriptionInput = document.createElement('input');
-  descriptionInput.setAttribute('type', 'text');
-  descriptionInput.setAttribute('name', 'description');
-  descriptionInput.setAttribute('placeholder', 'Project Description');
-  descriptionInput.required = true;
-  // submit button
-  const submit = document.createElement('button');
-  submit.setAttribute('type', 'submit');
-  submit.innerText = 'Create';
-  // populate form
-  form.appendChild(nameInput);
-  form.appendChild(descriptionInput);
-  form.appendChild(submit);
-  // when form is submitted
+  // clone the template
+  const formTemplate = document.querySelector('#project-form-template form');
+  const form = formTemplate.cloneNode(true);
+  // add submit event listener
   form.addEventListener('submit', e => {
     e.preventDefault();
+    // generate unique ID
+    const id = uniqid();
     // extract form values
-    const projectObj = {
-      name: e.target.elements['name'].value,
-      description: e.target.elements['description'].value,
-    };
+    const name = e.target.elements['name'].value;
+    const description = e.target.elements['description'].value;
     // pass that object to create function & close the modal
-    createProject(projectObj);
+    createProject(id, name, description);
+    renderProjects(getProjects());
+    renderTasks(getTasks());
     closeModal(newProjectModal);
   });
 
@@ -151,71 +139,21 @@ function openNewProjectModal() {
 
 // create new task form
 function createNewTaskForm() {
-  const form = document.createElement('form');
-  // title input
-  const titleInput = document.createElement('input');
-  titleInput.setAttribute('type', 'text');
-  titleInput.setAttribute('name', 'title');
-  titleInput.setAttribute('placeholder', 'Task Title');
-  titleInput.required = true;
-  // description input
-  const descriptionInput = document.createElement('input');
-  descriptionInput.setAttribute('type', 'text');
-  descriptionInput.setAttribute('name', 'description');
-  descriptionInput.setAttribute('placeholder', 'Task Description');
-  descriptionInput.required = true;
-  // due date input
-  const dueDateWrapper = document.createElement('div');
-  dueDateWrapper.classList.add('input-wrapper');
-  const dueDateLabel = document.createElement('label');
-  dueDateLabel.setAttribute('for', 'due-date');
-  dueDateLabel.innerText = 'Due Date';
-  const dueDateInput = document.createElement('input');
-  dueDateInput.setAttribute('type', 'date');
-  dueDateInput.setAttribute('name', 'due-date');
-  dueDateInput.required = true;
-  dueDateWrapper.appendChild(dueDateLabel);
-  dueDateWrapper.appendChild(dueDateInput);
-  // priority input
-  const priorityWrapper = document.createElement('div');
-  priorityWrapper.classList.add('input-wrapper');
-  const priorityLabel = document.createElement('label');
-  priorityLabel.setAttribute('for', 'priority');
-  priorityLabel.innerText = 'Priority';
-  const priorityInput = document.createElement('select');
-  priorityInput.setAttribute('name', 'priority');
-  priorityInput.required = true;
-  const priorityOptions = ['low', 'medium', 'high'];
-  priorityOptions.forEach(opt => {
-    const option = document.createElement('option');
-    option.innerText = opt;
-    option.setAttribute('value', opt);
-    priorityInput.appendChild(option);
-  });
-  priorityWrapper.appendChild(priorityLabel);
-  priorityWrapper.appendChild(priorityInput);
-  // submit button
-  const submit = document.createElement('button');
-  submit.setAttribute('type', 'submit');
-  submit.innerText = 'Create';
-  // populate form
-  form.appendChild(titleInput);
-  form.appendChild(descriptionInput);
-  form.appendChild(dueDateWrapper);
-  form.appendChild(priorityWrapper);
-  form.appendChild(submit);
-  // when form is submitted
+  // clone the template
+  const formTemplate = document.querySelector('#task-form-template form');
+  const form = formTemplate.cloneNode(true);
+  // add submit event listener
   form.addEventListener('submit', e => {
     e.preventDefault();
+    const projectID = getActiveProjectID();
     // extract form values
-    const taskObj = {
-      projectID: getActiveProjectID(),
-      title: e.target.elements['title'].value,
-      description: e.target.elements['description'].value,
-      dueDate: e.target.elements['due-date'].value,
-      priority: e.target.elements['priority'].value,
-    };
-    createTask(taskObj);
+    const title = e.target.elements['title'].value;
+    const description = e.target.elements['description'].value;
+    const dueDate = e.target.elements['due-date'].value;
+    const priority = e.target.elements['priority'].value;
+
+    createTask(projectID, title, description, dueDate, priority);
+    renderTasks(getTasks());
     closeModal(newTaskModal);
   });
 
@@ -237,22 +175,11 @@ function openNewTaskModal() {
 
 // create delete form
 function createDeleteForm(callback) {
-  const form = document.createElement('form');
-  form.setAttribute('id', 'delete-form');
-  // delete button
-  const deleteBtn = document.createElement('button');
-  deleteBtn.innerText = 'Delete';
-  deleteBtn.setAttribute('id', 'delete-btn');
-  deleteBtn.setAttribute('type', 'submit');
-  deleteBtn.addEventListener('click', callback);
-  // cancel button
-  const cancelBtn = document.createElement('button');
-  cancelBtn.innerText = 'Cancel';
-  cancelBtn.setAttribute('id', 'cancel-btn');
-  // populate form
-  form.appendChild(deleteBtn);
-  form.appendChild(cancelBtn);
-  // when form is submitted
+  // clone the template
+  const formTemplate = document.querySelector('#delete-form-template form');
+  const form = formTemplate.cloneNode(true);
+  // set event listeners
+  form.querySelector('#delete-btn').addEventListener('click', callback);
   form.addEventListener('submit', e => {
     e.preventDefault();
     closeModal(deleteModal);
@@ -270,10 +197,18 @@ function openDeleteModal(item) {
   let callbackFunc;
   if (typeof item === 'string') {
     // project ID was passed in
-    callbackFunc = () => deleteProject(item);
+    callbackFunc = () => {
+      deleteProject(item);
+      deleteProjectTasks(item);
+      renderProjects(getProjects());
+      renderTasks(getTasks());
+    }
   } else {
     // task object was passed in
-    callbackFunc = () => deleteTask(item.title, getActiveProjectID());
+    callbackFunc = () => {
+      deleteTask(item.title);
+      renderTasks(getTasks());
+    };
   }
   const form = createDeleteForm(callbackFunc);
   body.appendChild(form);
@@ -286,26 +221,14 @@ function openDeleteModal(item) {
 function closeModal(modal) {
   // empty modal body content
   const modalBody = document.querySelector(`div#${modal.getAttribute('id')} .modal-body`);
-  while (modalBody.hasChildNodes()) {
-    modalBody.removeChild(modalBody.lastChild);
-  }
+  clearContent(modalBody);
   // hide the modal
   modal.style.display = 'none';
 }
 
-// expand/shrink task
-function toggleTaskInfo() {
-  console.log('clicked');
+// used for clearing element contents in the UI
+function clearContent(list) {
+  while (list.hasChildNodes()) {
+    list.removeChild(list.lastChild);
+  }
 }
-
-// add event listeners
-function addEventListeners() {
-  newProject.addEventListener('click', openNewProjectModal);
-  newTask.addEventListener('click', openNewTaskModal);
-}
-
-export default {
-  renderProjects,
-  renderTasks,
-  addEventListeners
-};
